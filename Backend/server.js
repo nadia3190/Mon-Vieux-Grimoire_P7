@@ -14,6 +14,7 @@ const normalizePort = val => {
 const port = normalizePort(process.env.PORT || '3000');// La fonction normalizePort renvoie un port valide, qu'il soit fourni sous la forme d'un numéro ou d'une chaîne
 app.set('port', port);// La méthode set permet de définir des variables d'environnement
 
+
 const errorHandler = error => {// La fonction errorHandler  recherche les différentes erreurs et les gère de manière appropriée. Elle est ensuite enregistrée dans le serveur
   if (error.syscall !== 'listen') {
     throw error;
@@ -26,7 +27,7 @@ const errorHandler = error => {// La fonction errorHandler  recherche les diffé
       process.exit(1);
       break;
     case 'EADDRINUSE':
-      console.error(bind + ' is already in use.');
+      console.error(bind + ' is already in use.');//Get-Process -Id (Get-NetTCPConnection -LocalPort 3000).OwningProcess | Stop-Process -Force  si le port est déjà utilisé
       process.exit(1);
       break;
     default:
