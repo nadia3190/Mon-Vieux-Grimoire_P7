@@ -1,8 +1,9 @@
+// app.js est un fichier qui contient le code qui permet de créer l'application express et de la configurer. Il contient également le code qui permet de se connecter à la base de données MongoDB.
 const express = require('express'); // Importation du framework express pour faciliter la configuration du serveur
 const mongoose = require('mongoose');// Importation du package mongoose pour faciliter les interactions avec la base de données
 const bodyParser = require('body-parser');// Importation du package body-parser pour transformer le corps de la requête en objet JavaScript utilisable
 
-const Thing = require('./Models/thing'); // Importation du modèle Thing
+const Thing = require('./Models/user'); // Importation du modèle Thing
 
 
 
@@ -38,6 +39,53 @@ app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
   next();
 });
+
+app.post('/api/stuff', (req, res, next) => {
+    delete req.body._id;
+    const thing = new Thing({
+        ...req.body
+    });
+    thing.save()
+        .then(() => res.status(201).json({ message: 'Objet enregistré !'}))
+        .catch(error => res.status(400).json({ error }));
+});
+
+app.use('/api/stuff/', (req, res, next) => {
+    const stuff = [
+        {
+            _id: 'oeihfzeoi',
+            title: 'Mon premier objet',
+            description: 'Les infos de mon premier objet',
+            imageUrl: '',
+            price: 4900,
+            userId: 'qsomihvqios',
+        },
+        {
+            _id: 'oeihfzeomoihi',
+            title: 'Mon deuxième objet',
+            description: 'Les infos de mon deuxième objet',
+            imageUrl: '',
+            price: 2900,
+            userId: 'qsomihvqios',
+        },
+    ];
+    res.status(200).json(stuff);
+});
+
+
+
+
+app.use('/api/stuff', (req, res, next) => {
+    Thing.find()
+        .then(things => res.status(200).json(things))
+        .catch(error => res.status(400).json({ error }));
+});
+
+
+
+
+
+
 
 
 
