@@ -60,5 +60,7 @@ const bookSchema = new mongoose.Schema({// Création d'un schéma de données po
   }
 });
 
+module.exports = mongoose.model('Book', bookSchema);
+
 
 

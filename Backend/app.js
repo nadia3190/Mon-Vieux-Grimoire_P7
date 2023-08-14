@@ -28,9 +28,6 @@ app.use(express.json());
 // Middleware pour servir les fichiers statiques du dossier "public"
 app.use(express.static('public'));
 
-// Middleware pour parser les requêtes avec du JSON
-app.use(bodyParser.json());
-
 //CORS (Cross-Origin Resource Sharing) est un mécanisme de sécurité utilisé par les navigateurs web pour contrôler les requêtes d'un domaine (ou origine) à un autre.
 // Middleware pour ajouter les headers CORS aux réponses
 app.use((req, res, next) => {
@@ -40,58 +37,6 @@ app.use((req, res, next) => {
   next();
 });
 
-app.post('/api/stuff', (req, res, next) => {
-    delete req.body._id;
-    const thing = new Thing({
-        ...req.body
-    });
-    thing.save()
-        .then(() => res.status(201).json({ message: 'Objet enregistré !'}))
-        .catch(error => res.status(400).json({ error }));
-});
-
-app.use('/api/stuff/', (req, res, next) => {
-    const stuff = [
-        {
-            _id: 'oeihfzeoi',
-            title: 'Mon premier objet',
-            description: 'Les infos de mon premier objet',
-            imageUrl: '',
-            price: 4900,
-            userId: 'qsomihvqios',
-        },
-        {
-            _id: 'oeihfzeomoihi',
-            title: 'Mon deuxième objet',
-            description: 'Les infos de mon deuxième objet',
-            imageUrl: '',
-            price: 2900,
-            userId: 'qsomihvqios',
-        },
-    ];
-    res.status(200).json(stuff);
-});
-
-
-
-
-app.use('/api/stuff', (req, res, next) => {
-    Thing.find()
-        .then(things => res.status(200).json(things))
-        .catch(error => res.status(400).json({ error }));
-});
-
-
-
-
-
-
-
-
 
 
 module.exports = app;
-
-
-// un middleware est une fonction qui reçoit les objets request et response en tant que paramètre.
-//CORS est un mécanisme de sécurité qui bloque les requêtes HTTP entre deux navigateurs différents.
