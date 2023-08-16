@@ -1,5 +1,19 @@
 const http = require('http'); // Import du module http
 const app = require('./app'); // Import du fichier app.js
+const server = http.createServer(app);// La méthode createServer du package http permet de créer un serveur avec en argument la fonction app
+
+const WebSocket = require('ws'); // Import du module websocket permet de créer un serveur websocket 
+// websocket est un protocole de communication bi-directionnel de données par-dessus TCP, défini par la RFC 6455. Il fournit un canal de communication full-duplex par-dessus une connexion TCP unique.
+const wss = new WebSocket.Server({ server });
+wss.on('connection', (socket) => {
+  console.log('Nouvelle connexion WebSocket établie');
+
+  // Gérez les messages entrants, etc.
+  socket.on('message', (message) => {
+    console.log('Message reçu:', message);
+    // Faites quelque chose avec le message reçu
+  });
+});
 const normalizePort = val => {
   const port = parseInt(val, 10);// La fonction normalizePort renvoie un port valide, qu'il soit fourni sous la forme d'un numéro ou d'une chaîne
 
@@ -11,7 +25,7 @@ const normalizePort = val => {
   }
   return false;
 };
-const port = normalizePort(process.env.PORT || '3000');// La fonction normalizePort renvoie un port valide, qu'il soit fourni sous la forme d'un numéro ou d'une chaîne
+const port = normalizePort(process.env.PORT || '4000');// La fonction normalizePort renvoie un port valide, qu'il soit fourni sous la forme d'un numéro ou d'une chaîne
 app.set('port', port);// La méthode set permet de définir des variables d'environnement
 
 
@@ -35,7 +49,6 @@ const errorHandler = error => {// La fonction errorHandler  recherche les diffé
   }
 };
 
-const server = http.createServer(app);// La méthode createServer du package http permet de créer un serveur avec en argument la fonction app
 
 server.on('error', errorHandler);
 server.on('listening', () => {

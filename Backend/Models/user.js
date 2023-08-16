@@ -14,5 +14,5 @@ const userSchema = mongoose.Schema({
     required: true }
 });
 
-userSchema.plugin(uniqueValidator);
-module.exports = mongoose.model('User', userSchema);
+userSchema.plugin(uniqueValidator);// Applique le plugin à notre schéma avant d'en faire un modèle
+module.exports = mongoose.model('user', userSchema);

@@ -19,6 +19,8 @@ const ratingSchema = new mongoose.Schema({// Création d'un schéma de données 
 
 
 
+
+
 const bookSchema = new mongoose.Schema({// Création d'un schéma de données pour les livres
   
   userId: {

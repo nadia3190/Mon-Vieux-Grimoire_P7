@@ -2,8 +2,7 @@
 const express = require('express'); // Importation du framework express pour faciliter la configuration du serveur
 const mongoose = require('mongoose');// Importation du package mongoose pour faciliter les interactions avec la base de données
 const bodyParser = require('body-parser');// Importation du package body-parser pour transformer le corps de la requête en objet JavaScript utilisable
-
-const Thing = require('./Models/user'); // Importation du modèle Thing
+const cors = require('cors'); // Importez le module cors
 
 
 
@@ -12,19 +11,17 @@ const app = express(); // Création d'une application express pour pouvoir utili
 // Connexion à la base de données MongoDB
 
 mongoose.connect('mongodb+srv://nadiaDB:IccRUik3zyTCyVDY@nadiadb.rmy6few.mongodb.net/?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true })// La méthode connect() de mongoose permet de se connecter à la base de données MongoDB
-    .then(() => {// La méthode then() renvoie un objet Promise. Elle peut prendre jusqu'à deux arguments qui sont des fonctions callback à exécuter en cas de complétion ou d'échec de la Promise.
-        console.log('Connexion à la base de données réussie !');
-      app.listen(4000, () => {
-    console.log('Le serveur écoute sur le port 3000');
-});
-    })
-    .catch(err => {
-        console.error('Erreur de connexion à la base de données:', err);
-    });
+   .then(() => console.log('Connexion à MongoDB réussie !'))
+  .catch(() => console.log('Connexion à MongoDB échouée !'));
 
 // Middleware pour parser les requêtes avec du JSON
 app.use(express.json());
 
+
+const port = 4000;
+app.listen(port, '127.0.0.1', () => {
+  console.log(`Listening on port ${port}`);
+});
 // Middleware pour servir les fichiers statiques du dossier "public"
 app.use(express.static('public'));
 
@@ -37,6 +34,13 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use(cors({ origin: 'http://localhost:3000' }));
+
+const userRoutes = require('./Routes/user');
+const bookRoutes = require('./Routes/book');
+
+app.use('/api/books', bookRoutes);
+app.use('/api/auth', userRoutes);
 
 
 module.exports = app;
