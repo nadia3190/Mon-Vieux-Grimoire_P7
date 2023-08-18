@@ -66,3 +66,11 @@ exports.signup =(req, res, next) => {// fonction qui permet d'enregistrer un nou
       next(error);
     });
 };
+
+
+      //400 : mauvaise requête
+      //401 : non authentifié
+      //403 : accès interdit
+      //404 : non trouvé
+      //422 : entité non traitable
+      //500 : erreur interne du serveur

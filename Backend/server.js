@@ -59,4 +59,5 @@ server.on('listening', () => {
 
 server.listen(port);
 
+
 //server.js est le fichier principal de l'application, il contient le code qui permet de créer un serveur Node et de le faire tourner. Il contient également le code qui permet de gérer les CORS et les différentes routes de l'API.

@@ -14,9 +14,7 @@ mongoose.connect('mongodb+srv://nadiaDB:IccRUik3zyTCyVDY@nadiadb.rmy6few.mongodb
    .then(() => console.log('Connexion à MongoDB réussie !'))
   .catch(() => console.log('Connexion à MongoDB échouée !'));
 
-// Middleware pour parser les requêtes avec du JSON
-app.use(express.json());
-
+bodyParser.json();// Transforme le corps de la requête en objet JavaScript utilisable
 
 const port = 4000;
 app.listen(port, '127.0.0.1', () => {
@@ -24,6 +22,8 @@ app.listen(port, '127.0.0.1', () => {
 });
 // Middleware pour servir les fichiers statiques du dossier "public"
 app.use(express.static('public'));
+// Middleware pour parser les requêtes avec du JSON
+app.use(express.json());
 
 //CORS (Cross-Origin Resource Sharing) est un mécanisme de sécurité utilisé par les navigateurs web pour contrôler les requêtes d'un domaine (ou origine) à un autre.
 // Middleware pour ajouter les headers CORS aux réponses
@@ -34,13 +34,20 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(cors({ origin: 'http://localhost:3000' }));
+app.use(cors({ origin: 'http://localhost:3000' }));// Pour autoriser l'origine de la requête à accéder à notre API  
 
-const userRoutes = require('./Routes/user');
-const bookRoutes = require('./Routes/book');
+const userRoutes = require('./Routes/user');// Importation du routeur pour les demandes vers /api/auth
+const bookRoutes = require('./Routes/book');// Importation du routeur pour les demandes vers /api/books
 
-app.use('/api/books', bookRoutes);
-app.use('/api/auth', userRoutes);
+app.use('/api/auth', userRoutes);// Pour enregistrer les routes pour les demandes vers /api/auth
+app.use('/api/books', bookRoutes);// Pour enregistrer les routes pour les demandes vers /api/books
 
 
 module.exports = app;
+
+//app.use permet de définir une fonction qui sera exécutée pour chaque requête reçue par le serveur.
+//app.get permet de répondre uniquement aux requêtes GET 
+//app.post permet de répondre uniquement aux requêtes POST
+//app.put permet de répondre uniquement aux requêtes PUT
+//app.delete permet de répondre uniquement aux requêtes DELETE
+
