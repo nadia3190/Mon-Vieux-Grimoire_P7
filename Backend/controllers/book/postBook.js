@@ -21,10 +21,12 @@ exports.postBook = (req, res, next) => {
     .then(() => {
       // Si réussi, envoyer une réponse avec un code d'état 201 et un message de succès
       res.status(201).json({ message: "Livre enregistré avec succès !" });
+      console.log("Livre enregistré avec succès !");
     })
     .catch((error) => {
       // Si une erreur se produit, envoyer une réponse avec un code d'état 400 et le message d'erreur
       res.status(400).json({ error: error });
+      console.log("erreur global controller");
     });
 };
 //200 = ok

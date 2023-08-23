@@ -6,6 +6,6 @@ exports.getAllBooks = async (req, res, next) => {
     const books = await Book.find({});
     res.status(200).json(books);
   } catch (error) {
-    res.status(400).json({ error });
+    res.status(500).json({ error });
   }
 };

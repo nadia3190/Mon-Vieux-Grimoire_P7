@@ -4,24 +4,23 @@ const router = express.Router(); //on utilise la méthode Router d'express pour 
 
 const auth = require("../middleware/auth"); //pour la gestion des tokens
 const multer = require("../middleware/multer-config"); //pour la gestion des images
-const getAllBooksControl = require("../controllers/book/getAllBooks"); // Assurez-vous du chemin correct
-const addBookControl = require("../controllers/book/postBook");
-const giveRatingBookCtrl = require("../controllers/book/giveRatingBook");
+
+const getAllBooksCtrl = require("../controllers/book/getAllBooks");
 const getBookByIdCtrl = require("../controllers/book/getBookById");
 const getBestRatingCtrl = require("../controllers/book/getBestRating");
-const getBookByUserIdCtrl = require("../controllers/book/getBookByUserId");
+const postBooksCtrl = require("../controllers/book/postBook");
+const modifyBookCtrl = require("../controllers/book/updateBook");
 const deleteBookCtrl = require("../controllers/book/deleteBook");
-const updateBookCtrl = require("../controllers/book/updateBook");
+const giveRatingBookCtrl = require("../controllers/book/giveRatingBook");
 
-router.post("/:id/rating", auth, giveRatingBookCtrl.giveRatingBook); //on utilise la méthode post pour envoyer les requêtes POST à notre API
-router.get("/", getAllBooksControl.getAllBooks); //on utilise la méthode get pour envoyer les requêtes GET à notre API
-router.post("/", auth, multer, addBookControl.postBook); //on utilise la méthode post pour envoyer les requêtes POST à notre API
-router.get("/:id", getBookByIdCtrl.getBookById); //on utilise la méthode get pour envoyer les requêtes GET à notre API
-router.get("/bestrating", getBestRatingCtrl.getBestRating); //on utilise la méthode get pour envoyer les requêtes GET à notre API
-router.get("/user/:id", getBookByUserIdCtrl.getBookByUserId);
-router.delete("/:id", auth, deleteBookCtrl.deleteBook); //on utilise la méthode delete pour envoyer les requêtes DELETE à notre API
-router.put("/:id", auth, multer, updateBookCtrl.updateBook); //on utilise la méthode put pour envoyer les requêtes PUT à notre API
+router.get("/", getAllBooksCtrl.getAllBooks);
+router.get("/bestrating", getBestRatingCtrl.getBestRating);
+router.get("/:id", getBookByIdCtrl.getBookById);
+router.post("/:id/rating", auth, giveRatingBookCtrl.giveRatingBook);
+router.post("/", auth, multer, postBooksCtrl.postBook);
+router.put("/:id", auth, multer, modifyBookCtrl.updateBook);
+router.delete("/:id", auth, deleteBookCtrl.deleteBook);
 
-module.exports = router;
+module.exports = router; //on exporte ce routeur pour pouvoir l'importer dans app.js
 
 //Crud : Create, Read, Update, Delete
