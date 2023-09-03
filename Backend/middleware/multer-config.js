@@ -3,6 +3,7 @@
 // multer va permettre de gerer les fichiers entrants dans les requetes http
 //fs permet de gerer les fichiers stockés
 //sharp permet de modifier les images
+
 const multer = require("multer");
 const fs = require("fs");
 const sharp = require("sharp");
@@ -75,16 +76,17 @@ module.exports = (req, res, next) => {
         await uploadMiddleware(req, res);
 
         if (req.file) {
-          const imagePath = req.file.path;
+          // si la requete contient un fichier
+          const imagePath = req.file.path; // on récupère le chemin de l'image
 
           // Utilisation de Sharp pour compresser l'image
           await sharp(imagePath).resize(800).toFile(`${imagePath}-compressed`);
 
-          fs.unlinkSync(imagePath);
-          fs.renameSync(`${imagePath}-compressed`, imagePath);
+          fs.unlinkSync(imagePath); // on supprime l'image d'origine
+          fs.renameSync(`${imagePath}-compressed`, imagePath); // on renomme l'image compressée avec le nom de l'image d'origine
         }
 
-        next();
+        next(); // on passe au middleware suivant
       } catch (error) {
         console.log("ERROR MULTER -- ");
         next(error);

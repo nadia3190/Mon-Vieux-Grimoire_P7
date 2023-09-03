@@ -8,10 +8,10 @@ exports.getBestRating = async (req, res, next) => {
     // Utilisation de la méthode d'agrégation de Mongoose pour trier les livres par note moyenne, de la plus haute à la plus basse, et pour limiter le nombre de résultats à 3
     const bestRatedBooks = await Book.aggregate([
       {
-        $sort: { averageRating: -1 },
+        $sort: { averageRating: -1 }, // trier les livres par note moyenne, de la plus haute à la plus basse
       },
       {
-        $limit: 3,
+        $limit: 3, // limiter le nombre de résultats à 3
       },
     ]);
     // Si la requête est réussie, renvoie une réponse avec un code de statut 200 et les trois livres les mieux notés

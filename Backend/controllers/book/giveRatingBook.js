@@ -14,17 +14,19 @@ exports.giveRatingBook = async (req, res) => {
 
   // Vérifier que l'identifiant de l'utilisateur et la note sont fournis
   if (!userId || !rating) {
+    // si userId ou rating n'existe pas dans le body de la requête, renvoie une erreur avec un code de statut 400
     return res.status(400).json({ message: "userId and rating are required" });
   }
 
   // Vérifier que la note est comprise entre 0 et 5
   if (rating < 0 || rating > 5) {
+    // si la note est inférieure à 0 ou supérieure à 5, renvoie une erreur avec un code de statut 400 et un message d'erreur
     return res.status(400).json({ message: "Rating must be between 0 and 5" });
   }
 
   try {
     // Trouver le livre correspondant à l'identifiant fourni
-    const book = await Book.findById(id);
+    const book = await Book.findById(id); // si le livre n'est pas trouvé, renvoie une erreur avec un code de statut 404 et un message d'erreur
     if (!book) {
       return res.status(404).json({ message: "Book not found" });
     }
@@ -33,13 +35,14 @@ exports.giveRatingBook = async (req, res) => {
       (item) => item.userId.toString() === userId
     );
     if (ratingExists) {
+      // si l'utilisateur a déjà noté ce livre, renvoie une erreur avec un code de statut 400 et un message d'erreur
       return res
         .status(400)
         .json({ message: "User has already rated this book" });
     }
 
     // Ajouter la note à la liste des notes du livre
-    book.ratings.push({ userId, grade: rating });
+    book.ratings.push({ userId, grade: rating }); // ajoute la note à la liste des notes du livre
 
     // Calculer la note moyenne du livre
     const totalRating = book.ratings.reduce((acc, item) => acc + item.grade, 0);
@@ -48,7 +51,7 @@ exports.giveRatingBook = async (req, res) => {
     );
 
     // Enregistrer les modifications dans la base de données
-    await book.save();
+    await book.save(); // enregistre les modifications dans la base de données
 
     // Envoyer une réponse avec un code de statut 201 et le livre mis à jour
     return res.status(201).json(book);

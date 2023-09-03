@@ -17,7 +17,7 @@ exports.postBook = (req, res, next) => {
 
   // Save book dans le database
   book
-    .save()
+    .save() // enregistre le livre dans la base de données
     .then(() => {
       // Si réussi, envoyer une réponse avec un code d'état 201 et un message de succès
       res.status(201).json({ message: "Livre enregistré avec succès !" });
