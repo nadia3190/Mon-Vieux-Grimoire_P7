@@ -2,6 +2,7 @@ const User = require("../Models/user"); // importation du modèle User
 const jwt = require("jsonwebtoken"); // importation du module jsonwebtoken pour la gestion des tokens d'authentification
 const bcrypt = require("bcrypt"); // importation du module bcrypt pour le hashage des mots de passe
 const passwordValidator = require("password-validator"); // importation du module password-validator pour la validation des mots de passe
+require("dotenv").config(); // Importation du package dotenv pour masquer les informations de connexion à la base de données MongoDB
 
 // *********************************Connexion d'un utilisateur existant********************************
 
@@ -31,7 +32,7 @@ exports.login = (req, res, next) => {
           res.setHeader("Content-Type", "application/json"); // Définit le type de contenu de la réponse à JSON
           res.status(200).json({
             userId: user._id,
-            token: jwt.sign({ userId: user._id }, "RANDOM_TOKEN_SECRET", {
+            token: jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
               expiresIn: "24h",
             }),
           });

@@ -3,22 +3,23 @@ const express = require("express"); // Importation du framework express pour fac
 const mongoose = require("mongoose"); // Importation du package mongoose pour faciliter les interactions avec la base de données
 const bodyParser = require("body-parser"); // Importation du package body-parser pour transformer le corps de la requête en objet JavaScript utilisable
 const cors = require("cors"); // Importez le module cors
+require("dotenv").config(); // Importation du package dotenv pour masquer les informations de connexion à la base de données MongoDB
 
 const app = express(); // Création d'une application express pour pouvoir utiliser les fonctionnalités du framework
 
 // Connexion à la base de données MongoDB
 
 mongoose
-  .connect(
-    "mongodb+srv://nadiaDB:IccRUik3zyTCyVDY@nadiadb.rmy6few.mongodb.net/?retryWrites=true&w=majority",
-    { useNewUrlParser: true, useUnifiedTopology: true }
-  ) // La méthode connect() de mongoose permet de se connecter à la base de données MongoDB
+  .connect(process.env.MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  }) // La méthode connect() de mongoose permet de se connecter à la base de données MongoDB
   .then(() => console.log("Connexion à MongoDB réussie !"))
   .catch(() => console.log("Connexion à MongoDB échouée !"));
 
 bodyParser.json(); // Transforme le corps de la requête en objet JavaScript utilisable
 
-const port = 4000;
+const port = process.env.PORT || 4000;
 app.listen(port, "127.0.0.1", () => {
   console.log(`Listening on port ${port}`);
 });
