@@ -12,6 +12,7 @@ const app = express(); // Création d'une application express pour pouvoir utili
 
 mongoose
   .connect(process.env.MONGODB_URI, {
+    //process.env.MONGODB_URI est une variable d'environnement qui contient l'URL de connexion à la base de données MongoDB
     useNewUrlParser: true,
     useUnifiedTopology: true,
   }) // La méthode connect() de mongoose permet de se connecter à la base de données MongoDB

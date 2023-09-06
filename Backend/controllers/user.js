@@ -2,6 +2,7 @@ const User = require("../Models/user"); // importation du modèle User
 const jwt = require("jsonwebtoken"); // importation du module jsonwebtoken pour la gestion des tokens d'authentification
 const bcrypt = require("bcrypt"); // importation du module bcrypt pour le hashage des mots de passe
 const passwordValidator = require("password-validator"); // importation du module password-validator pour la validation des mots de passe
+const validator = require("validator"); // importation du module validator pour la validation des emails
 require("dotenv").config();
 
 // *********************************Connexion d'un utilisateur existant********************************
@@ -51,6 +52,13 @@ exports.login = (req, res, next) => {
 // *********************************Création d'un nouvel utilisateur********************************
 
 exports.signup = (req, res, next) => {
+  if (!validator.isEmail(req.body.email)) {
+    console.log("Adresse email invalide.");
+    const error = new Error("Adresse email invalide.");
+    error.statusCode = 422;
+    throw error;
+  }
+
   bcrypt
     .hash(req.body.password, 10)
     .then((hash) => {
@@ -83,7 +91,7 @@ exports.signup = (req, res, next) => {
 
       // si le hachage réussit, crée un nouvel utilisateur avec l'adresse email et le mot de passe haché
       const user = new User({
-        email: req.body.email,
+        email: req.body.email, // adresse email fournie dans le corps de la requête
         password: hash, // hachage du mot de passe
       });
       user

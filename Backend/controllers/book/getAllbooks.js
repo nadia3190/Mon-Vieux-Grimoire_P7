@@ -8,7 +8,7 @@ exports.getAllBooks = async (req, res, next) => {
   //next = fonction qui permet de passer à la prochaine fonction middleware
 
   try {
-    const books = await Book.find({});
+    const books = await Book.find({}); // récupère tous les livres de la base de données
     res.status(200).json(books);
   } catch (error) {
     res.status(500).json({ error });
