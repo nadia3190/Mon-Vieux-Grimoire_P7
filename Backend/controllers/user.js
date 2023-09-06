@@ -2,7 +2,7 @@ const User = require("../Models/user"); // importation du modèle User
 const jwt = require("jsonwebtoken"); // importation du module jsonwebtoken pour la gestion des tokens d'authentification
 const bcrypt = require("bcrypt"); // importation du module bcrypt pour le hashage des mots de passe
 const passwordValidator = require("password-validator"); // importation du module password-validator pour la validation des mots de passe
-require("dotenv").config(); // Importation du package dotenv pour masquer les informations de connexion à la base de données MongoDB
+require("dotenv").config();
 
 // *********************************Connexion d'un utilisateur existant********************************
 

@@ -48,7 +48,7 @@ exports.giveRatingBook = async (req, res) => {
     const totalRating = book.ratings.reduce((acc, item) => acc + item.grade, 0);
     book.averageRating = parseFloat(totalRating / book.ratings.length).toFixed(
       2
-    );
+    ); // calcule la note moyenne du livre et l'arrondit à deux décimales après la virgule (toFixed(2))
 
     // Enregistrer les modifications dans la base de données
     await book.save(); // enregistre les modifications dans la base de données

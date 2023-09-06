@@ -4,6 +4,7 @@ const mongoose = require("mongoose"); // Importation du package mongoose pour fa
 const bodyParser = require("body-parser"); // Importation du package body-parser pour transformer le corps de la requête en objet JavaScript utilisable
 const cors = require("cors"); // Importez le module cors
 require("dotenv").config(); // Importation du package dotenv pour masquer les informations de connexion à la base de données MongoDB
+const helmet = require("helmet"); // Importez Helmet pour sécuriser les en-têtes HTTP
 
 const app = express(); // Création d'une application express pour pouvoir utiliser les fonctionnalités du framework
 
@@ -18,6 +19,8 @@ mongoose
   .catch(() => console.log("Connexion à MongoDB échouée !"));
 
 bodyParser.json(); // Transforme le corps de la requête en objet JavaScript utilisable
+
+app.use(helmet()); // Utilisez Helmet pour sécuriser les en-têtes HTTP
 
 const port = process.env.PORT || 4000;
 app.listen(port, "127.0.0.1", () => {
