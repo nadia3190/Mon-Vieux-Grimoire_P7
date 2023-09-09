@@ -5,8 +5,13 @@ const bodyParser = require("body-parser"); // Importation du package body-parser
 const cors = require("cors"); // Importez le module cors
 require("dotenv").config(); // Importation du package dotenv pour masquer les informations de connexion à la base de données MongoDB
 const helmet = require("helmet"); // Importez Helmet pour sécuriser les en-têtes HTTP
-
 const app = express(); // Création d'une application express pour pouvoir utiliser les fonctionnalités du framework
+const jwt = require("jsonwebtoken");
+
+// Utilisation de la clé secrète depuis les variables d'environnement
+const token = jwt.sign({ userId: 123 }, process.env.JWT_SECRET, {
+  expiresIn: "24h",
+});
 
 // Connexion à la base de données MongoDB
 
@@ -59,7 +64,7 @@ app.use(cors(corsOptions));
 
 const userRoutes = require("./Routes/user"); // Importation du routeur pour les demandes vers /api/auth
 const bookRoutes = require("./Routes/book"); // Importation du routeur pour les demandes vers /api/books
-const errorHandler = require("./middleware/errorHandler");
+const errorHandler = require("./middleware/errorHandler"); // Importation du middleware pour gérer les erreurs routes
 
 app.use("/api/auth", userRoutes); // Pour enregistrer les routes pour les demandes vers /api/auth
 app.use("/api/books", bookRoutes); // Pour enregistrer les routes pour les demandes vers /api/books
@@ -72,3 +77,5 @@ module.exports = app;
 //app.post permet de répondre uniquement aux requêtes POST
 //app.put permet de répondre uniquement aux requêtes PUT
 //app.delete permet de répondre uniquement aux requêtes DELETE
+
+//un middleware est une fonction qui reçoit les objets request et response en tant que paramètres et qui peut effectuer des actions sur ces objets avant de les transmettre à la prochaine fonction middleware.

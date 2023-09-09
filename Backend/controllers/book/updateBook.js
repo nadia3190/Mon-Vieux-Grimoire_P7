@@ -8,6 +8,7 @@ exports.updateBook = async (req, res, next) => {
     // Chercher le livre à modifier en utilisant son ID
     const book = await Book.findById(req.params.id);
     if (!book) {
+      // Si le livre n'est pas trouvé, renvoie une erreur avec un code de statut 404 et un message d'erreur
       return res.status(404).json({ error: "Book not found" });
     }
 

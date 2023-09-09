@@ -18,3 +18,6 @@ exports.getBookById = async (req, res, next) => {
 //req = requete envoyé par le front end
 //res = réponse envoyé par le back end
 //next = fonction qui permet de passer à la suite du code (comme un return)
+
+//findOne() = méthode de mongoose qui permet de récupérer un document d'une collection
+//findOne({ _id: req.params.id }) = récupère le document avec l'ID fourni

@@ -14,3 +14,6 @@ exports.getAllBooks = async (req, res, next) => {
     res.status(500).json({ error });
   }
 };
+
+//find() = méthode de mongoose qui permet de récupérer tous les documents d'une collection
+//find({}) = récupère tous les documents de la collection

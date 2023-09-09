@@ -12,3 +12,5 @@ exports.deleteBook = async (req, res, next) => {
     res.status(400).json({ error }); // renvoie une erreur en cas d'échec
   }
 };
+//deleteOne() = méthode de mongoose qui permet de supprimer un document d'une collection
+//deleteOne({ _id: req.params.id }) = supprime le document avec l'ID fourni

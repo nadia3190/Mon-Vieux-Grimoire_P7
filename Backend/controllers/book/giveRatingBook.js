@@ -7,10 +7,10 @@ const Book = require("../../Models/book");
 // Exporter une fonction nommée giveRatingBook pour gérer les demandes POST visant à ajouter une note à un livre existant
 exports.giveRatingBook = async (req, res) => {
   // Extraire l'identifiant de l'utilisateur et la note du corps de la demande
-  const { userId, rating } = req.body;
+  const { userId, rating } = req.body; //req.body = corps de la requête envoyée par le frontend (userId et rating sont envoyés par le frontend)
 
   // Extraire l'identifiant du livre de la demande
-  const { id } = req.params;
+  const { id } = req.params; //req.params = paramètres de la requête envoyée par le frontend (id est envoyé par le frontend)
 
   // Vérifier que l'identifiant de l'utilisateur et la note sont fournis
   if (!userId || !rating) {
@@ -61,3 +61,5 @@ exports.giveRatingBook = async (req, res) => {
     return res.status(500).json({ message: "Server error" });
   }
 };
+
+//findbyId() = méthode de mongoose qui permet de récupérer un document d'une collection en fonction de son ID (comme la méthode findOne() mais plus adaptée pour récupérer un document en fonction de son ID)

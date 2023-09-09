@@ -32,3 +32,5 @@ exports.postBook = (req, res, next) => {
 //200 = ok
 //201 = created
 //400 = bad request
+
+//save() = méthode de mongoose qui permet d'enregistrer un document dans une collection

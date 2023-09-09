@@ -21,3 +21,5 @@ exports.getBestRating = async (req, res, next) => {
     res.status(400).json({ error });
   }
 };
+
+//aggregate() = méthode de mongoose qui permet d'effectuer des opérations d'agrégation sur les données d'une collection (comme la méthode group() en SQL)
