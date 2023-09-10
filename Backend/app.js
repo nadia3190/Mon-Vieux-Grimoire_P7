@@ -3,16 +3,9 @@ const express = require("express"); // Importation du framework express pour fac
 const mongoose = require("mongoose"); // Importation du package mongoose pour faciliter les interactions avec la base de données
 const bodyParser = require("body-parser"); // Importation du package body-parser pour transformer le corps de la requête en objet JavaScript utilisable
 const cors = require("cors"); // Importez le module cors
-require("dotenv").config(); // Importation du package dotenv pour masquer les informations de connexion à la base de données MongoDB
 const helmet = require("helmet"); // Importez Helmet pour sécuriser les en-têtes HTTP
 const app = express(); // Création d'une application express pour pouvoir utiliser les fonctionnalités du framework
-const jwt = require("jsonwebtoken");
-
-// Utilisation de la clé secrète depuis les variables d'environnement
-const token = jwt.sign({ userId: 123 }, process.env.JWT_SECRET, {
-  expiresIn: "24h",
-});
-
+require("dotenv").config(); // Importation du package dotenv pour masquer les informations de connexion à la base de données MongoDB
 // Connexion à la base de données MongoDB
 
 mongoose

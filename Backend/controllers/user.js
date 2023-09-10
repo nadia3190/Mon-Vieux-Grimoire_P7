@@ -1,36 +1,31 @@
-const User = require("../Models/user"); // importation du modèle User
-const jwt = require("jsonwebtoken"); // importation du module jsonwebtoken pour la gestion des tokens d'authentification
-const bcrypt = require("bcrypt"); // importation du module bcrypt pour le hashage des mots de passe
-const passwordValidator = require("password-validator"); // importation du module password-validator pour la validation des mots de passe
-const validator = require("validator"); // importation du module validator pour la validation des emails
-require("dotenv").config();
-
+const User = require("../Models/user");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
+const passwordValidator = require("password-validator");
+const validator = require("validator");
+require("dotenv").config(); // Importation du package dotenv pour masquer les informations de connexion à la base de données MongoDB
 // *********************************Connexion d'un utilisateur existant********************************
 
 exports.login = (req, res, next) => {
-  // fonction qui permet de connecter un utilisateur existant en vérifiant ses identifiants, en renvoyant son identifiant userID depuis la base de données et en créant un token d'authentification pour cette connexion
-  console.log("debut controller auth");
+  console.log("Début du contrôleur d'authentification");
   User.findOne({ email: req.body.email })
     .then((user) => {
       if (!user) {
-        // si l'utilisateur n'est pas trouvé dans la base de données, renvoie une erreur
         console.log("Utilisateur ou Mot de passe incorrect.");
-        const error = new Error("Utilisateur ou Mot de passe incorrect.");
-        error.statusCode = 401;
-        throw error; // Passe l'erreur à la prochaine fonction middleware
+        return res
+          .status(401)
+          .json({ error: "Utilisateur ou Mot de passe incorrect." });
       }
       bcrypt
         .compare(req.body.password, user.password)
         .then((valid) => {
-          // si l'utilisateur est trouvé dans la base de données, vérifie que le mot de passe correspond à celui de la base de données
           if (!valid) {
             console.log("Utilisateur ou Mot de passe incorrect.");
-            const error = new Error("Utilisateur ou Mot de passe incorrect.");
-            error.statusCode = 401;
-            throw error;
+            return res
+              .status(401)
+              .json({ error: "Utilisateur ou Mot de passe incorrect." });
           }
 
-          res.setHeader("Content-Type", "application/json"); // Définit le type de contenu de la réponse à JSON
           res.status(200).json({
             userId: user._id,
             token: jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
@@ -39,13 +34,13 @@ exports.login = (req, res, next) => {
           });
         })
         .catch((error) => {
-          next(error); // Passe l'erreur à la prochaine fonction middleware
+          console.error("Erreur de comparaison de mot de passe:", error);
+          res.status(500).json({ error: "Erreur de serveur interne." });
         });
     })
     .catch((error) => {
-      console.log("erreur global controller");
-      console.log(error);
-      next(error); // Passe l'erreur à la prochaine fonction middleware
+      console.error("Erreur lors de la recherche de l'utilisateur:", error);
+      res.status(500).json({ error: "Erreur de serveur interne." });
     });
 };
 
@@ -54,58 +49,45 @@ exports.login = (req, res, next) => {
 exports.signup = (req, res, next) => {
   if (!validator.isEmail(req.body.email)) {
     console.log("Adresse email invalide.");
-    const error = new Error("Adresse email invalide.");
-    error.statusCode = 422;
-    throw error;
+    return res.status(422).json({ error: "Adresse email invalide." });
+  }
+
+  if (!isValidPwd(req.body.password)) {
+    console.log("Mot de passe invalide.");
+    return res
+      .status(400)
+      .json({ error: validationMessages(req.body.password) });
   }
 
   bcrypt
     .hash(req.body.password, 10)
     .then((hash) => {
-      // hachage du mot de passe avec le module bcrypt pour sécuriser le mot de passe
-      const schema = new passwordValidator(); // Crée un schéma de validation de mot de passe avec le module password-validator pour vérifier que le mot de passe respecte les critères de sécurité requis
-
-      schema
-        .is()
-        .min(8)
-        .is()
-        .max(100)
-        .has()
-        .uppercase()
-        .has()
-        .lowercase()
-        .has()
-        .digits()
-        .has()
-        .symbols()
-        .not()
-        .spaces();
-
-      // Validez le mot de passe avant de créer l'utilisateur
-      if (!schema.validate(req.body.password)) {
-        console.log("Mot de passe invalide.");
-        const error = new Error("Mot de passe invalide.");
-        error.statusCode = 422;
-        throw error;
-      }
-
-      // si le hachage réussit, crée un nouvel utilisateur avec l'adresse email et le mot de passe haché
       const user = new User({
-        email: req.body.email, // adresse email fournie dans le corps de la requête
-        password: hash, // hachage du mot de passe
+        email: req.body.email,
+        password: hash,
       });
       user
-        .save() // sauvegarde le nouvel utilisateur dans la base de données
-        .then(() => res.status(201).json({ message: "Utilisateur créé !" }))
+        .save()
+        .then(() => {
+          res.status(201).json({ message: "Utilisateur créé !" });
+        })
         .catch((error) => {
-          error.message = "Erreur, cet email existe déjà";
-          next(error);
+          if (error.name === "MongoError" && error.code === 11000) {
+            console.log("Cette adresse e-mail est déjà utilisée.");
+            return res
+              .status(400)
+              .json({ error: "Cette adresse e-mail est déjà utilisée." });
+          }
+          console.error(
+            "Erreur lors de l'enregistrement de l'utilisateur:",
+            error
+          );
+          res.status(500).json({ error: "Erreur de serveur interne." });
         });
     })
     .catch((error) => {
-      error.statusCode = 422;
-      error.message = "Erreur, cet email existe déjà";
-      next(error);
+      console.error("Erreur lors du hachage du mot de passe:", error);
+      res.status(500).json({ error: "Erreur de serveur interne." });
     });
 };
 
@@ -115,3 +97,38 @@ exports.signup = (req, res, next) => {
 //404 : non trouvé
 //422 : entité non traitable
 //500 : erreur interne du serveur
+
+// Création du schéma de mot de passe
+const schemaPassword = new passwordValidator();
+
+const isValidPwd = (password) => {
+  // Propriétés du schéma de mot de passe
+  schemaPassword
+    .is()
+    .min(8) // Minimum de 8 caractères
+    .is()
+    .max(100) // Maximum de 100 caractères
+    .has()
+    .lowercase() // Doit contenir des minuscules
+    .has()
+    .uppercase(1) // Doit contenir au moins 1 majuscule
+    .has()
+    .digits(2) // Doit contenir au moins 2 chiffres
+    .has()
+    .symbols(1) // Doit contenir au moins un caractères spécial
+    .has()
+    .not()
+    .spaces(); // Should not have spaces
+  // Création de la fonction de validité du mot de passe
+  return schemaPassword.validate(password);
+};
+
+// Création de la fonction retournant les messages de validation
+const validationMessages = (password) => {
+  let messages = "";
+  const arr = schemaPassword.validate(password, { details: true });
+  for (let i = 0; i < arr.length; i++) {
+    messages += arr[i].message + " *** ";
+  }
+  return messages;
+};
