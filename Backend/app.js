@@ -1,9 +1,8 @@
 // app.js est un fichier qui contient le code qui permet de créer l'application express et de la configurer. Il contient également le code qui permet de se connecter à la base de données MongoDB.
 const express = require("express"); // Importation du framework express pour faciliter la configuration du serveur
 const mongoose = require("mongoose"); // Importation du package mongoose pour faciliter les interactions avec la base de données
-const bodyParser = require("body-parser"); // Importation du package body-parser pour transformer le corps de la requête en objet JavaScript utilisable
 const cors = require("cors"); // Importez le module cors
-const helmet = require("helmet"); // Importez Helmet pour sécuriser les en-têtes HTTP
+const helmet = require("helmet"); // Importation  le module helmet
 const app = express(); // Création d'une application express pour pouvoir utiliser les fonctionnalités du framework
 require("dotenv").config(); // Importation du package dotenv pour masquer les informations de connexion à la base de données MongoDB
 // Connexion à la base de données MongoDB
@@ -17,9 +16,7 @@ mongoose
   .then(() => console.log("Connexion à MongoDB réussie !"))
   .catch(() => console.log("Connexion à MongoDB échouée !"));
 
-bodyParser.json(); // Transforme le corps de la requête en objet JavaScript utilisable
-
-app.use(helmet()); // Utilisez Helmet pour sécuriser les en-têtes HTTP
+app.use(express.json()); // Middleware pour parser les requêtes avec du JSON
 
 const port = process.env.PORT || 4000;
 app.listen(port, "127.0.0.1", () => {
@@ -54,6 +51,15 @@ const corsOptions = {
 
 // Utilisez le middleware cors avec les options configurées
 app.use(cors(corsOptions));
+
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      defaultSrc: ["'self'"],
+      imgSrc: ["'self'"],
+    },
+  })
+);
 
 const userRoutes = require("./Routes/user"); // Importation du routeur pour les demandes vers /api/auth
 const bookRoutes = require("./Routes/book"); // Importation du routeur pour les demandes vers /api/books

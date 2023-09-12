@@ -32,7 +32,7 @@ exports.giveRatingBook = async (req, res) => {
     }
     // Vérifier si l'utilisateur a déjà noté ce livre
     const ratingExists = book.ratings.some(
-      (item) => item.userId.toString() === userId
+      (item) => item.userId.toString() === userId //some() = méthode de javascript qui permet de vérifier si au moins un élément d'un tableau vérifie une condition donnée (ici, on vérifie si au moins un élément de la liste des notes du livre a un userId égal à celui fourni dans la requête)
     );
     if (ratingExists) {
       // si l'utilisateur a déjà noté ce livre, renvoie une erreur avec un code de statut 400 et un message d'erreur
