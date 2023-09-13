@@ -60,6 +60,10 @@ app.use(
     },
   })
 );
+//helmet permet de sécuriser l'application Express en configurant les en-têtes HTTP et les CORS. Il permet de se protéger contre les attaques XSS, MIME sniffing, clickjacking, etc.
+//helmet permet aussi de protéger l'application Express contre les attaques XSS en configurant les en-têtes HTTP Content-Security-Policy et X-XSS-Protection.
+//Il permet également de protéger l'application Express contre les attaques MIME sniffing en configurant l'en-tête HTTP X-Content-Type-Options.
+// Il permet également de protéger l'application Express contre les attaques clickjacking en configurant l'en-tête HTTP X-Frame-Options.
 
 const userRoutes = require("./Routes/user"); // Importation du routeur pour les demandes vers /api/auth
 const bookRoutes = require("./Routes/book"); // Importation du routeur pour les demandes vers /api/books
