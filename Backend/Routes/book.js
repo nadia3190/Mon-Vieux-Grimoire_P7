@@ -5,7 +5,7 @@ const router = express.Router(); //on utilise la méthode Router d'express pour 
 const auth = require("../middleware/auth"); //pour la gestion des tokens
 const multer = require("../middleware/multer-config"); //pour la gestion des images
 
-const getAllBooksCtrl = require("../controllers/book/getAllBooks");
+const getAllBooksCtrl = require("../controllers/book/getAllbooks");
 const getBookByIdCtrl = require("../controllers/book/getBookById");
 const getBestRatingCtrl = require("../controllers/book/getBestRating");
 const postBooksCtrl = require("../controllers/book/postBook");
