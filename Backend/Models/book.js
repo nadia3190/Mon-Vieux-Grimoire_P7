@@ -2,12 +2,15 @@
 
 const mongoose = require("mongoose");
 
+//on appelle Schema de mongoose pour créer un schéma de données
+//en sql on appelle ça une table
+
 const ratingSchema = new mongoose.Schema({
   // Création d'un schéma de données pour les notes des utilisateurs
 
   userId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
+    ref: "User", //référence à l'utilisateur qui a créé la note du livre
   },
 
   grade: {
@@ -20,8 +23,9 @@ const bookSchema = new mongoose.Schema({
   // Création d'un schéma de données pour les livres
 
   userId: {
+    //id de l'utilisateur qui a créé le livre
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
+    ref: "User", //référence à l'utilisateur qui a créé le livre
     required: true,
   },
 
@@ -59,3 +63,4 @@ const bookSchema = new mongoose.Schema({
 });
 
 module.exports = mongoose.model("Book", bookSchema); // Exportation du schéma de données pour les livres
+//mongoose.model() = méthode qui permet de créer un modèle mongoose à partir d'un schéma de données

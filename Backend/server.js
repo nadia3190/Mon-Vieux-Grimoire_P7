@@ -70,3 +70,4 @@ console.log(jwtSecret);
 //express est un framework Node.js qui permet de créer des applications web. Il fournit des fonctionnalités qui facilitent la création d'applications web, comme la gestion des routes, la gestion des requêtes et des réponses, etc.
 //Le fichier app.js contient le code qui configure l'application Express et la connecte à la base de données MongoDB. Il contient également le code qui configure les en-têtes HTTP et les CORS.
 //websocket est un protocole de communication bidirectionnel qui permet aux clients et au serveur de communiquer en temps réel. Il est utilisé pour créer des applications web en temps réel, comme les applications de chat.
+//

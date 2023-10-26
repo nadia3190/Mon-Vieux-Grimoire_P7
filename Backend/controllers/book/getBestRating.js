@@ -9,6 +9,7 @@ exports.getBestRating = async (req, res, next) => {
     const bestRatedBooks = await Book.aggregate([
       {
         $sort: { averageRating: -1 }, // trier les livres par note moyenne, de la plus haute à la plus basse
+        // -1 = ordre décroissant (du plus grand au plus petit)
       },
       {
         $limit: 3, // limiter le nombre de résultats à 3

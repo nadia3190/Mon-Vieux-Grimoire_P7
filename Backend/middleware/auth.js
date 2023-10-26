@@ -6,6 +6,7 @@ require("dotenv").config(); // Importation du package dotenv pour masquer les in
 module.exports = (req, res, next) => {
   try {
     const token = req.headers.authorization.split(" ")[1]; // récupération du token d'authentification à partir de l'en-tête Authorization de la requête
+    //.split(" ")[1] = on récupère tout après l'espace dans l'en-tête Authorization
     const decodedToken = jwt.verify(token, process.env.JWT_SECRET); // vérification de la validité du token à l'aide de la clé secrète prédéfinie
     const userId = decodedToken.userId; // récupération de l'identifiant utilisateur à partir du token décodé
     req.auth = {

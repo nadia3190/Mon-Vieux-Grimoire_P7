@@ -125,10 +125,12 @@ const isValidPwd = (password) => {
 
 // Création de la fonction retournant les messages de validation
 const validationMessages = (password) => {
+  //password = mot de passe saisi par l'utilisateur lors de l'inscription (req.body.password)
   let messages = "";
-  const arr = schemaPassword.validate(password, { details: true });
+  const arr = schemaPassword.validate(password, { details: true }); //details: true permet de retourner les messages d'erreur de validation du mot de passe
   for (let i = 0; i < arr.length; i++) {
-    messages += arr[i].message + " *** ";
+    //arr.length = nombre de messages d'erreur de validation du mot de passe (arr)
+    messages += arr[i].message + " *** "; //arr[i].message = message d'erreur de validation du mot de passe
   }
   return messages;
 };

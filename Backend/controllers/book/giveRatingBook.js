@@ -8,6 +8,7 @@ const Book = require("../../Models/book");
 exports.giveRatingBook = async (req, res) => {
   // Extraire l'identifiant de l'utilisateur et la note du corps de la demande
   const { userId, rating } = req.body; //req.body = corps de la requête envoyée par le frontend (userId et rating sont envoyés par le frontend)
+  //si on ne extrait pas on affiche avec req.body.userId et req.body.rating
 
   // Extraire l'identifiant du livre de la demande
   const { id } = req.params; //req.params = paramètres de la requête envoyée par le frontend (id est envoyé par le frontend)
@@ -45,10 +46,19 @@ exports.giveRatingBook = async (req, res) => {
     book.ratings.push({ userId, grade: rating }); // ajoute la note à la liste des notes du livre
 
     // Calculer la note moyenne du livre
-    const totalRating = book.ratings.reduce((acc, item) => acc + item.grade, 0);
+    const totalRating = book.ratings.reduce((acc, item) => acc + item.grade, 0); //le 0 à la fin de la ligne est la valeur initiale de l'accumulateur (acc)
     book.averageRating = parseFloat(totalRating / book.ratings.length).toFixed(
       2
     ); // calcule la note moyenne du livre et l'arrondit à deux décimales après la virgule (toFixed(2))
+    //acc = 0
+    //acc = acc + 1 = 0 + 1 = 1
+    //acc = acc + 2 = 1 + 2 = 3
+    //acc = acc + 3 = 3 + 3 = 6
+    //acc = acc + 4 = 6 + 4 = 10
+    //acc = acc + 5 = 10 + 5 = 15
+
+    //book.averageRating = 15 / 5 = 3 (toFixed(2) = 3,00)
+    //parseFloat() = méthode de javascript qui permet de convertir une chaîne de caractères en nombre à virgule flottante
 
     // Enregistrer les modifications dans la base de données
     await book.save(); // enregistre les modifications dans la base de données

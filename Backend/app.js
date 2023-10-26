@@ -24,23 +24,9 @@ app.listen(port, "127.0.0.1", () => {
 });
 // Middleware pour servir les fichiers statiques du dossier "public"
 app.use(express.static("public"));
-// Middleware pour parser les requêtes avec du JSON
-app.use(express.json());
-
+//app.use(express.static("public")) permet de servir les fichiers statiques du dossier "public" à chaque requête vers le endpoint /images
 //CORS (Cross-Origin Resource Sharing) est un mécanisme de sécurité utilisé par les navigateurs web pour contrôler les requêtes d'un domaine (ou origine) à un autre.
 // Middleware pour ajouter les headers CORS aux réponses
-app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content, Accept, Content-Type, Authorization"
-  );
-  res.setHeader(
-    "Access-Control-Allow-Methods",
-    "GET, POST, PUT, DELETE, PATCH, OPTIONS"
-  );
-  next();
-});
 
 const corsOptions = {
   origin: "http://localhost:3000", // Adresse du serveur autorisé (ici le port du frontend) à communiquer avec le serveur backend
@@ -82,3 +68,4 @@ module.exports = app;
 //app.delete permet de répondre uniquement aux requêtes DELETE
 
 //un middleware est une fonction qui reçoit les objets request et response en tant que paramètres et qui peut effectuer des actions sur ces objets avant de les transmettre à la prochaine fonction middleware.
+//empecher un autre utilisateur d'executer ma connexion mongoDb dans sa machine

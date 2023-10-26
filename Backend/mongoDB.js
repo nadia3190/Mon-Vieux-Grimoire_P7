@@ -7,6 +7,7 @@ const uri = process.env.MONGODB_URI;
 
 const client = new MongoClient(uri, {
   serverApi: {
+    // pour utiliser la version 1 de l'API MongoDB
     version: ServerApiVersion.v1,
     strict: true,
     deprecationErrors: true,
@@ -20,9 +21,7 @@ async function run() {
     await client.connect();
 
     await client.db("admin").command({ ping: 1 });
-    console.log(
-      "Pinged your deployment. You successfully connected to MongoDB!"
-    );
+    console.log("You successfully connected to MongoDB!");
   } finally {
     await client.close();
   }
