@@ -1,4 +1,5 @@
 const http = require("http"); //importation du package http de Node.js qui permet de créer un serveur HTTP
+//http permet de créer un serveur HTTP qui écoute les requêtes entrantes et y répond en envoyant une réponse HTTP
 const app = require("./app"); //importation de l'application Express à partir du fichier app.js
 const server = http.createServer(app); //création du serveur Node.js en utilisant la fonction createServer() du package http de Node.js
 
@@ -16,6 +17,7 @@ wss.on("connection", (socket) => {
 
 const normalizePort = (val) => {
   const port = parseInt(val, 10);
+  //10 = base 10 (décimale) exemple: 0x10 = base 16 (hexadécimale) 010 = base 8 (octale) 0b10 = base 2 (binaire)
 
   if (isNaN(port)) {
     return val;
@@ -36,6 +38,7 @@ const errorHandler = (error) => {
   const address = server.address(); //configuration du gestionnaire d'erreurs du serveur Node.js en utilisant la fonction errorHandler() qui recherche les différentes erreurs et les gère de manière appropriée
   const bind =
     typeof address === "string" ? "pipe " + address : "port: " + port;
+  //sockets = mécanisme de communication entre processus
   switch (error.code) {
     case "EACCES":
       console.error(bind + " requires elevated privileges.");
@@ -61,10 +64,6 @@ app.on("listening", () => {
 });
 
 server.listen(port);
-
-const crypto = require("crypto");
-const jwtSecret = crypto.randomBytes(64).toString("hex");
-console.log(jwtSecret);
 
 //le fichier server.js est le point d'entrée de l'application. Il contient le code qui crée le serveur Node.js et le connecte à l'application Express. Il contient également le code qui configure le serveur WebSocket.
 //express est un framework Node.js qui permet de créer des applications web. Il fournit des fonctionnalités qui facilitent la création d'applications web, comme la gestion des routes, la gestion des requêtes et des réponses, etc.

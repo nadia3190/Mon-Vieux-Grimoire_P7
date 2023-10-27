@@ -8,8 +8,13 @@ module.exports = (req, res, next) => {
     const token = req.headers.authorization.split(" ")[1]; // récupération du token d'authentification à partir de l'en-tête Authorization de la requête
     //.split(" ")[1] = on récupère tout après l'espace dans l'en-tête Authorization
     const decodedToken = jwt.verify(token, process.env.JWT_SECRET); // vérification de la validité du token à l'aide de la clé secrète prédéfinie
+    jwt.verify(token, process.env.JWT_SECRET); // vérification de la validité du token à l'aide de la clé secrète prédéfinie
+
     const userId = decodedToken.userId; // récupération de l'identifiant utilisateur à partir du token décodé
+    //req.auth = { userId: userId }; // on crée un objet auth dans la requête pour y stocker l'identifiant utilisateur
+
     req.auth = {
+      // on crée un objet auth dans la requête pour y stocker l'identifiant utilisateur
       userId: userId,
     };
     next(); // continuer l'exécution de la requête si l'utilisateur est authentifié

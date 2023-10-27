@@ -16,7 +16,7 @@ exports.getBestRating = async (req, res, next) => {
       },
     ]);
     // Si la requête est réussie, renvoie une réponse avec un code de statut 200 et les trois livres les mieux notés
-    res.status(200).json(bestRatedBooks);
+    res.status(200).json(bestRatedBooks); // renvoie un tableau d'objets
   } catch (error) {
     // Si une erreur se produit, renvoie une réponse avec un code de statut 400 et un objet d'erreur contenant le message d'erreur
     res.status(400).json({ error });

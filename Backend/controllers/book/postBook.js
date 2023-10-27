@@ -5,6 +5,7 @@ const Book = require("../../Models/book");
 exports.postBook = (req, res, next) => {
   // Analyse les données du livres à partir des donées JSON
   const bookObject = JSON.parse(req.body.book); //transforme les données JSON en objet JS
+  //parse() = méthode JS qui permet de transformer des données JSON en objet JS
 
   // Créer un nouveu libre (Book) en utilisant les données du livre analysées, l'ID utilisateur et l'URL de l'image
   const book = new Book({

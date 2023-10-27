@@ -4,15 +4,17 @@
 //fs permet de gerer les fichiers stockés
 //sharp permet de modifier les images
 
-const multer = require("multer");
-const fs = require("fs");
-const sharp = require("sharp");
+const multer = require("multer"); // on importe multer pour la gestion des fichiers entrants dans les requêtes HTTP
+const fs = require("fs"); //on importe fs pour la gestion des fichiers stockés
+const sharp = require("sharp"); // on importe sharp pour la gestion des fichiers stockés
 
 const storage = multer.diskStorage({
+  // distStorage est un objet de configuration pour multer qui contient deux fonctions : destination et filename
   // on utilise la fonction diskStorage pour enregistrer sur le disque et on lui passe un objet de configuration
   destination: (req, file, callback) => {
     // on indique la destination des fichiers entrants dans la requete
     callback(null, "public/images"); // on indique le dossier de destination des images
+    //callback = fonction qui permet de renvoyer une réponse au client (comme un return)
   },
   filename: (req, file, callback) => {
     // on indique le nom du fichier
@@ -56,7 +58,10 @@ module.exports = (req, res, next) => {
     const uploadMiddleware = (req, res) => {
       // on crée une fonction pour gérer les fichiers entrants dans les requêtes HTTP et on lui passe la requête et la réponse
       return new Promise((resolve, reject) => {
+        // Promise = objet qui représente l'état d'une opération asynchrone (en cours, terminée ou en échec)
+        // on crée une promesse pour gérer les fichiers entrants dans les requêtes HTTP et on lui passe la requête et la réponse
         upload.single("image")(req, res, (err) => {
+          //.single("image") = on précise qu'on attend un seul fichier avec le nom image
           if (err) {
             console.log("Image supérieure à 4 Mo");
             let error = new Error(
@@ -65,7 +70,7 @@ module.exports = (req, res, next) => {
             error.statusCode = 400;
             reject(error);
           } else {
-            resolve();
+            resolve(); // resolve = fonction qui permet de renvoyer une réponse au client (comme un return)
           }
         });
       });

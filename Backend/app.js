@@ -2,7 +2,7 @@
 const express = require("express"); // Importation du framework express pour faciliter la configuration du serveur
 const mongoose = require("mongoose"); // Importation du package mongoose pour faciliter les interactions avec la base de données
 const cors = require("cors"); // Importez le module cors
-const helmet = require("helmet"); // Importation  le module helmet
+const helmet = require("helmet"); // Importation  le module helmet permet de secure l'application express
 const app = express(); // Création d'une application express pour pouvoir utiliser les fonctionnalités du framework
 require("dotenv").config(); // Importation du package dotenv pour masquer les informations de connexion à la base de données MongoDB
 // Connexion à la base de données MongoDB
@@ -59,7 +59,7 @@ app.use("/api/auth", userRoutes); // Pour enregistrer les routes pour les demand
 app.use("/api/books", bookRoutes); // Pour enregistrer les routes pour les demandes vers /api/books
 app.use(errorHandler); // Pour enregistrer le middleware pour gérer les erreurs
 
-module.exports = app;
+module.exports = app; //exporter l'application express pour pouvoir y accéder depuis les autres fichiers de l'application
 
 //app.use permet de définir une fonction qui sera exécutée pour chaque requête reçue par le serveur.
 //app.get permet de répondre uniquement aux requêtes GET

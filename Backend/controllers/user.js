@@ -1,8 +1,8 @@
 const User = require("../Models/user");
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
-const passwordValidator = require("password-validator");
-const validator = require("validator");
+const jwt = require("jsonwebtoken"); // Importation du package jsonwebtoken pour attribuer un jeton à un utilisateur lors de sa connexion
+const bcrypt = require("bcrypt"); // Importation du package bcrypt pour hasher les mots de passe des utilisateurs
+const passwordValidator = require("password-validator"); // Importation du package password-validator pour sécuriser les mots de passe des utilisateurs
+const validator = require("validator"); // Importation du package validator pour valider les adresses email des utilisateurs
 require("dotenv").config(); // Importation du package dotenv pour masquer les informations de connexion à la base de données MongoDB
 // *********************************Connexion d'un utilisateur existant********************************
 
@@ -61,6 +61,7 @@ exports.signup = (req, res, next) => {
 
   bcrypt
     .hash(req.body.password, 10)
+    //10 = nombre de tours de l'algorithme de hachage (plus le nombre de tours est élevé, plus l'exécution de l'algorithme est longue et plus le hachage est sécurisé)
     .then((hash) => {
       const user = new User({
         email: req.body.email,
@@ -73,6 +74,7 @@ exports.signup = (req, res, next) => {
         })
         .catch((error) => {
           if (error.name === "MongoError" && error.code === 11000) {
+            //11000 veut dire que l'email est déjà utilisé par un autre utilisateur dans la base de données
             console.log("Cette adresse e-mail est déjà utilisée.");
             return res
               .status(400)
@@ -120,17 +122,19 @@ const isValidPwd = (password) => {
     .not()
     .spaces(); // Should not have spaces
   // Création de la fonction de validité du mot de passe
-  return schemaPassword.validate(password);
+  return schemaPassword.validate(password); //validate() = méthode de password-validator qui permet de valider le mot de passe
 };
 
 // Création de la fonction retournant les messages de validation
 const validationMessages = (password) => {
+  // cette fonction retourne les messages d'erreur de validation du mot de passe
   //password = mot de passe saisi par l'utilisateur lors de l'inscription (req.body.password)
   let messages = "";
   const arr = schemaPassword.validate(password, { details: true }); //details: true permet de retourner les messages d'erreur de validation du mot de passe
   for (let i = 0; i < arr.length; i++) {
     //arr.length = nombre de messages d'erreur de validation du mot de passe (arr)
     messages += arr[i].message + " *** "; //arr[i].message = message d'erreur de validation du mot de passe
+    //les " *** " permettent de séparer les messages d'erreur de validation du mot de passe
   }
   return messages;
 };

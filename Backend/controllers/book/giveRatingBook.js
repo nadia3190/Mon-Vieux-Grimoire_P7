@@ -35,6 +35,7 @@ exports.giveRatingBook = async (req, res) => {
     const ratingExists = book.ratings.some(
       (item) => item.userId.toString() === userId //some() = méthode de javascript qui permet de vérifier si au moins un élément d'un tableau vérifie une condition donnée (ici, on vérifie si au moins un élément de la liste des notes du livre a un userId égal à celui fourni dans la requête)
     );
+
     if (ratingExists) {
       // si l'utilisateur a déjà noté ce livre, renvoie une erreur avec un code de statut 400 et un message d'erreur
       return res
@@ -46,7 +47,10 @@ exports.giveRatingBook = async (req, res) => {
     book.ratings.push({ userId, grade: rating }); // ajoute la note à la liste des notes du livre
 
     // Calculer la note moyenne du livre
-    const totalRating = book.ratings.reduce((acc, item) => acc + item.grade, 0); //le 0 à la fin de la ligne est la valeur initiale de l'accumulateur (acc)
+    const totalRating = book.ratings.reduce((acc, item) => acc + item.grade, 0);
+    //le 0 à la fin de la ligne est la valeur initiale de l'accumulateur (acc)
+    //reduce() = méthode de javascript qui permet d'appliquer une fonction à un accumulateur et à chaque valeur d'un tableau (de gauche à droite) pour la réduire à une seule valeur
+
     book.averageRating = parseFloat(totalRating / book.ratings.length).toFixed(
       2
     ); // calcule la note moyenne du livre et l'arrondit à deux décimales après la virgule (toFixed(2))

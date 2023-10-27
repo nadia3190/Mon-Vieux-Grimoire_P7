@@ -14,6 +14,7 @@ exports.updateBook = async (req, res, next) => {
 
     // Vérifier que l'utilisateur est autorisé à modifier ce livre
     if (book.userId.toString() !== req.auth.userId) {
+      //toString() = méthode de javascript qui permet de transformer un objet en chaîne de caractères
       //si l'utilisateur n'est pas l'auteur du livre, renvoie une erreur avec un code de statut 401 et un message d'erreur
       return res.status(401).json({ error: "Unauthorized" });
     }
